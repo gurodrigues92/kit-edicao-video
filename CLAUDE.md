@@ -160,20 +160,22 @@ Você está na nuvem quando roda em Linux com a variável `CLAUDE_CODE_REMOTE=tr
 - configure a marca uma vez e salve no repositório (veja abaixo);
 - termine cada vídeo na mesma conversa em que começou.
 
-### Receber arquivos (vídeo, foto, logo)
+### Google Drive: conector para achar, link para baixar
 
-Peça o **link do Google Drive** do arquivo. Ensine em uma frase como ela gera: no app do Drive, toque nos três pontinhos do arquivo, "Compartilhar", "Acesso geral: Qualquer pessoa com o link", e "Copiar link".
+A pessoa fala do Drive do jeito dela: "pega na pasta Ikigai o vídeo do prato", "vê quais vídeos tem na pasta da cliente X", "salva o pronto na mesma pasta". Atenda assim:
 
-Pegue o ID do link (o trecho depois de `/d/` ou de `id=`) e baixe:
+1. **Achar e entender, pelo conector do Google Drive** (`search_files`, `list_recent_files`, `get_file_metadata`, `read_file_content`). Ache a pasta pelo nome, liste os vídeos com nome, data e tamanho, leia briefing ou roteiro que estiver lá, e pergunte qual vídeo editar quando houver dúvida. Pasta com muitos vídeos: proponha os melhores pelo nome e pela data e confirme antes de baixar. Se o conector não aparecer nas suas ferramentas, peça pra ela ligar o Google Drive em Configurações > Conectores do Claude.
+2. **Foto e logo** (arquivos pequenos) podem vir pelo conector mesmo (`download_file_content`).
+3. **Vídeo vem pelo link**, porque o conector não aguenta arquivo grande. Uma vez por pasta, peça pra ela abrir o acesso: no app do Drive, três pontinhos da pasta, "Compartilhar", "Acesso geral: Qualquer pessoa com o link". Depois baixe pelo ID que o conector achou:
 
 ```
 curl -sSL -o entrada/video.mp4 "https://drive.usercontent.google.com/download?id=<ID>&export=download&confirm=t"
 file entrada/video.mp4
 ```
 
-Se o `file` disser HTML em vez de vídeo, o link não está aberto: peça pra ela conferir o "Qualquer pessoa com o link". Se ela mandar link de **pasta**, use `pip install gdown` e `gdown --folder <link> -O entrada/` e pergunte qual vídeo editar. Foto e logo vêm do mesmo jeito, direto pra `public/marca/`.
+Se o `file` disser HTML em vez de vídeo, o acesso da pasta ainda está fechado: peça pra ela conferir. Se ela mandar um link em vez do nome, pegue o ID do link (depois de `/d/` ou de `id=`); link de pasta baixa com `pip install gdown` e `gdown --folder <link> -O entrada/`.
 
-Não tente usar o conector do Google Drive pra vídeo: ele não aguenta arquivo desse tamanho.
+4. **Vídeo pronto de volta no Drive:** o conector não envia vídeo. Entregue pelo link (seção "Entregar o vídeo") e ensine a salvar: abrir o link no Safari, compartilhar, "Salvar em Arquivos" e escolher a pasta do Drive. Pelo conector, você pode criar a pasta de destino (por exemplo "Prontos") antes, pra ela só escolher.
 
 ### Salvar a marca
 
