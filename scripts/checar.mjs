@@ -35,6 +35,7 @@ if (t.palavras.length > 0) {
   });
   for (const k of ["titulos", "zooms", "imagens"]) ed[k].forEach((x, i) => { if (!(x.em < x.ate)) erros.push(`${k} ${i + 1}: "em" precisa ser menor que "ate"`); });
   ed.imagens.forEach((x) => { if (!existsSync(`public/imagens/${x.arquivo}`)) erros.push(`imagem não encontrada: public/imagens/${x.arquivo}`); });
+  if (ed.fecho && !existsSync(`public/${marca.foto}`)) erros.push(`fecho ligado sem foto: coloque public/${marca.foto} ou use "fecho": false`);
   if (ed.trilha && !existsSync(`public/audio/${ed.trilha.arquivo}`)) erros.push(`trilha não encontrada: public/audio/${ed.trilha.arquivo}`);
   ok(erros.length === 0, "edicao.json sem erros", `edicao.json:\n      ${erros.join("\n      ")}`);
 }

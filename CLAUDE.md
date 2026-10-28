@@ -2,7 +2,7 @@
 
 Você vai editar vídeos curtos verticais (Reels, TikTok, Shorts) que a pessoa gravou no celular. Você corta os silêncios e os erros, põe legenda palavra por palavra, títulos, zoom, imagens e o fecho com a marca dela. O vídeo sai pronto pra postar em `saida/`.
 
-Tudo roda no computador da pessoa. Nada é enviado pra internet, a não ser o download do Whisper na primeira vez.
+Normalmente tudo roda no computador da pessoa e nada é enviado pra internet, a não ser o download do Whisper na primeira vez. **Se você estiver na nuvem (iPad), leia antes a seção "Modo nuvem" no fim deste arquivo: ela muda como o vídeo entra e sai.**
 
 ## Com quem você está falando
 
@@ -122,7 +122,7 @@ Depois de editar, rode `npm run checar`. A última linha valida a edição. Corr
 
 ### 6. Gerar o vídeo e mostrar
 
-1. Rode `npm run render`. Leva de 2 a 4 vezes a duração do vídeo, então avise antes.
+1. Rode `npm run render`. No computador leva de 2 a 4 vezes a duração do vídeo; na nuvem, umas 13 vezes. Avise antes.
 2. Abra o resultado pra ela ver:
    - Mac: `open saida/video-final.mp4`
    - Windows: `start "" "saida\video-final.mp4"` (no PowerShell: `Start-Process saida\video-final.mp4`)
@@ -151,3 +151,49 @@ Quando ela aprovar, renomeie `saida/video-final.mp4` pra algo como `saida/2026-1
 - Não instale programa nenhum sem perguntar. O kit só precisa do Node.js, e o resto vem pelo `npm install`.
 - Não apague nada de `entrada/`.
 - Pra um efeito que o kit não tem, você pode editar `src/Video.tsx`. Mantenha o padrão do arquivo, rode `npm run tipos` (precisa sair sem erro) e gere um vídeo de teste antes de mostrar.
+
+## Modo nuvem (iPad)
+
+Você está na nuvem quando roda em Linux com a variável `CLAUDE_CODE_REMOTE=true`, ou quando a pessoa diz que usa iPad ou celular. Nesse caso ela não tem pasta nem terminal: só vê esta conversa. O resto do arquivo vale, com estas trocas.
+
+**O computador da nuvem é apagado quando a conversa termina.** O que não estiver no repositório some: vídeo, transcrição, Whisper e marca. Por isso:
+- configure a marca uma vez e salve no repositório (veja abaixo);
+- termine cada vídeo na mesma conversa em que começou.
+
+### Receber arquivos (vídeo, foto, logo)
+
+Peça o **link do Google Drive** do arquivo. Ensine em uma frase como ela gera: no app do Drive, toque nos três pontinhos do arquivo, "Compartilhar", "Acesso geral: Qualquer pessoa com o link", e "Copiar link".
+
+Pegue o ID do link (o trecho depois de `/d/` ou de `id=`) e baixe:
+
+```
+curl -sSL -o entrada/video.mp4 "https://drive.usercontent.google.com/download?id=<ID>&export=download&confirm=t"
+file entrada/video.mp4
+```
+
+Se o `file` disser HTML em vez de vídeo, o link não está aberto: peça pra ela conferir o "Qualquer pessoa com o link". Se ela mandar link de **pasta**, use `pip install gdown` e `gdown --folder <link> -O entrada/` e pergunte qual vídeo editar. Foto e logo vêm do mesmo jeito, direto pra `public/marca/`.
+
+Não tente usar o conector do Google Drive pra vídeo: ele não aguenta arquivo desse tamanho.
+
+### Salvar a marca
+
+Depois de configurar `src/marca.json` e os arquivos em `public/marca/`, faça commit só desses arquivos e tente `git push origin HEAD:main`. Se o push pro `main` for recusado, abra um pull request com o título "Marca configurada" e explique a ela, passo a passo, como tocar em "Merge" no GitHub. Na próxima conversa a marca já vem pronta.
+
+### Tempo
+
+- Preparar: o Whisper instala de novo a cada conversa nova (uns 3 minutos), mais 2 vezes a duração do vídeo pra transcrever.
+- Gerar o vídeo: umas 13 vezes a duração do vídeo. Um vídeo de 1 minuto leva uns 13 minutos.
+
+Rode os dois em segundo plano e dê notícia a cada etapa.
+
+### Entregar o vídeo
+
+Ela não consegue abrir `saida/`. Depois de cada render, envie o arquivo e passe o link:
+
+```
+curl -sS -F "reqtype=fileupload" -F "time=72h" -F "fileToUpload=@saida/video-final.mp4" https://litterbox.catbox.moe/resources/internals/api.php
+```
+
+Diga a ela: "Abra o link no Safari, toque no vídeo, depois em compartilhar (o quadrado com a seta) e em Salvar Vídeo. O link vale 3 dias e quem tiver ele consegue ver o vídeo." Se o vídeo for sigiloso e ela não quiser link aberto, faça commit do MP4 numa branch e ensine a baixar pelo GitHub.
+
+Só passe o link do vídeo final depois de ela aprovar as mudanças; para as versões de revisão, o mesmo link serve como prévia. O `npm run previa` não funciona na nuvem: não use.
