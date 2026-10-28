@@ -154,6 +154,8 @@ Quando ela aprovar, renomeie `saida/video-final.mp4` pra algo como `saida/2026-1
 
 ## Modo nuvem (iPad)
 
+Escreva tudo em português, inclusive os avisos curtos de progresso.
+
 Você está na nuvem quando roda em Linux com a variável `CLAUDE_CODE_REMOTE=true`, ou quando a pessoa diz que usa iPad ou celular. Nesse caso ela não tem pasta nem terminal: só vê esta conversa. O resto do arquivo vale, com estas trocas.
 
 **O computador da nuvem é apagado quando a conversa termina.** O que não estiver no repositório some: vídeo, transcrição, Whisper e marca. Por isso:
@@ -179,7 +181,7 @@ Se o `file` disser HTML em vez de vídeo, o acesso da pasta ainda está fechado:
 
 ### Salvar a marca
 
-Depois de configurar `src/marca.json` e os arquivos em `public/marca/`, faça commit só desses arquivos e tente `git push origin HEAD:main`. Se o push pro `main` for recusado, abra um pull request com o título "Marca configurada" e explique a ela, passo a passo, como tocar em "Merge" no GitHub. Na próxima conversa a marca já vem pronta.
+Depois de configurar `src/marca.json` e os arquivos em `public/marca/`, faça commit só desses arquivos e tente `git push origin HEAD:main`. Se o push pro `main` for recusado (é o normal na nuvem), abra um pull request **pronto, não rascunho**, com o título "Marca configurada", e explique a ela: abrir o link, tocar em "Merge pull request" e depois em "Confirm merge". Não inclua no pull request arquivos do vídeo (transcrição, edição), só a marca e melhorias do kit. Na próxima conversa a marca já vem pronta.
 
 ### Tempo
 
