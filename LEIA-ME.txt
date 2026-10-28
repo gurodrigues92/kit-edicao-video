@@ -1,0 +1,10 @@
+KIT DE EDIÇÃO DE VÍDEO COM CLAUDE
+
+1. Instale o que o guia pede (Node.js e o app do Claude). Só na primeira vez.
+2. Abra o app do Claude, clique em "Code" e escolha ESTA pasta (a pasta "kit").
+3. Escreva: Oi, quero configurar o kit.
+
+O Claude conduz o resto. Para cada vídeo novo, coloque o arquivo na pasta "entrada" e escreva:
+Coloquei um vídeo novo na pasta entrada, vamos editar.
+
+O vídeo pronto aparece na pasta "saida".

@@ -1,0 +1,6 @@
+node_modules/
+.cache/
+saida/
+entrada/*
+!entrada/COLOQUE-SEU-VIDEO-AQUI.txt
+public/projeto/video.mp4
