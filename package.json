@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "checar": "node scripts/checar.mjs",
+    "marca": "node scripts/marca.mjs",
     "preparar": "node scripts/preparar.mjs",
     "previa": "remotion studio src/index.ts",
     "render": "remotion render src/index.ts Video saida/video-final.mp4 --crf 18",

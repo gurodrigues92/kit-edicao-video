@@ -13,21 +13,33 @@ A pessoa não é programadora e nunca usou IA pra isso.
 - Antes de qualquer coisa demorada, diga quanto tempo leva. Exemplo: "vou preparar o vídeo, leva uns 3 minutos".
 - Quando der erro, não mostre o erro cru. Diga o que aconteceu em uma frase e o que você vai fazer.
 
-## Vários clientes
+## Marcas dos clientes
 
-Se a pessoa disser que edita pra vários clientes, não trave na configuração da marca: pule essa parte e, no começo de cada edição, pergunte de quem é o vídeo e a marca dele (@, cor, foto ou logo). Atualize `src/marca.json` com a marca daquele cliente antes de gerar. Guarde os arquivos de marca de cada cliente em `public/marca/<cliente>/` pra reaproveitar.
+A pessoa é editora e trabalha pra várias marcas. Cada cliente tem a sua pasta, guardada uma vez e reaproveitada sempre:
 
-Se ela não tiver o logo, use a foto do perfil do Instagram do cliente. Se o logo vier com fundo, tire o fundo antes de usar.
+```
+public/marcas/<cliente>/marca.json   {"arroba": "@ikigai", "cor": "#FF8A00", "foto": "marcas/ikigai/perfil.jpg", "logo": "marcas/ikigai/logo.png"}
+public/marcas/<cliente>/perfil.jpg
+public/marcas/<cliente>/logo.png     (opcional; sem logo, "logo": null)
+```
+
+`<cliente>` é o nome curto, minúsculo, sem acento nem espaço (`ikigai`, `clinica-ana`). Os caminhos dentro do `marca.json` começam em `marcas/`, sem `public/`.
+
+- `npm run marca` lista os clientes guardados.
+- `npm run marca -- ikigai` copia a marca da Ikigai pra `src/marca.json`, que é a marca usada no vídeo. Rode **antes de todo render**, sempre com o cliente do vídeo em questão.
+- No começo de cada vídeo, descubra de qual cliente é. Se ela não disser, pergunte. Se o cliente ainda não estiver guardado, cadastre (passo 3 da primeira vez) antes de editar.
+- Não tem logo? Use a foto do perfil do Instagram do cliente. Logo com fundo: tire o fundo antes de usar.
 
 ## Primeira vez (configuração)
 
 1. Rode `npm run checar`. Ele mostra o que está pronto e o que falta.
 2. Se faltar dependências, rode `npm install` (de 1 a 3 minutos). Um aviso sobre `install-scripts` ou `esbuild` é normal: ignore.
-3. Configure a marca em `src/marca.json`. Pergunte uma coisa de cada vez:
+3. Pergunte se ela edita pra ela mesma ou pra clientes, e cadastre a primeira marca (a dela ou a do primeiro cliente) em `public/marcas/<cliente>/`, como na seção "Marcas dos clientes". Uma pergunta de cada vez:
    - **O @ do perfil** → campo `arroba`.
    - **A cor da marca** → campo `cor`, em hexadecimal. Se ela descrever ("verde-limão", "o rosa do meu logo"), escolha você. A cor aparece em letra grossa com contorno preto por cima do vídeo, então precisa ser clara e viva. Se a cor da marca for escura (azul-marinho, vinho, preto), use uma versão clara dela e explique o porquê.
-   - **A foto de perfil** → peça pra ela arrastar o arquivo pra conversa ou dizer onde ele está. Copie pra `public/marca/perfil.jpg`.
-   - **O logo (opcional)** → PNG com fundo transparente, em `public/marca/logo.png`, e `"logo": "marca/logo.png"`. Sem logo, deixe `"logo": null`.
+   - **A foto de perfil** → peça pra ela arrastar o arquivo pra conversa ou dizer onde ele está. Copie pra `public/marcas/<cliente>/perfil.jpg`.
+   - **O logo (opcional)** → PNG com fundo transparente, em `public/marcas/<cliente>/logo.png`. Sem logo, `"logo": null`.
+   Depois rode `npm run marca -- <cliente>`.
 4. Rode `npm run checar` de novo e confirme que a marca ficou OK.
 
 ## Cada vídeo
@@ -159,7 +171,7 @@ Escreva tudo em português, inclusive os avisos curtos de progresso.
 Você está na nuvem quando roda em Linux com a variável `CLAUDE_CODE_REMOTE=true`, ou quando a pessoa diz que usa iPad ou celular. Nesse caso ela não tem pasta nem terminal: só vê esta conversa. O resto do arquivo vale, com estas trocas.
 
 **O computador da nuvem é apagado quando a conversa termina.** O que não estiver no repositório some: vídeo, transcrição, Whisper e marca. Por isso:
-- configure a marca uma vez e salve no repositório (veja abaixo);
+- guarde cada cliente uma vez no repositório (veja abaixo);
 - termine cada vídeo na mesma conversa em que começou.
 
 ### Google Drive: conector para achar, link para baixar
@@ -179,9 +191,9 @@ Se o `file` disser HTML em vez de vídeo, o acesso da pasta ainda está fechado:
 
 4. **Vídeo pronto de volta no Drive:** o conector não envia vídeo. Entregue pelo link (seção "Entregar o vídeo") e ensine a salvar: abrir o link no Safari, compartilhar, "Salvar em Arquivos" e escolher a pasta do Drive. Pelo conector, você pode criar a pasta de destino (por exemplo "Prontos") antes, pra ela só escolher.
 
-### Salvar a marca
+### Salvar as marcas dos clientes
 
-Depois de configurar `src/marca.json` e os arquivos em `public/marca/`, faça commit só desses arquivos e tente `git push origin HEAD:main`. Se o push pro `main` for recusado (é o normal na nuvem), abra um pull request **pronto, não rascunho**, com o título "Marca configurada", e explique a ela: abrir o link, tocar em "Merge pull request" e depois em "Confirm merge". Não inclua no pull request arquivos do vídeo (transcrição, edição), só a marca e melhorias do kit. Na próxima conversa a marca já vem pronta.
+Toda vez que cadastrar ou mudar um cliente, faça commit só da pasta `public/marcas/<cliente>/` (e de melhorias do kit, se houver) e tente `git push origin HEAD:main`. Se o push pro `main` for recusado (é o normal na nuvem), abra um pull request **pronto, não rascunho**, com o título "Marca: <cliente>", e explique a ela: abrir o link, tocar em "Merge pull request" e depois em "Confirm merge". Não inclua no pull request arquivos do vídeo (transcrição, edição), só a marca e melhorias do kit. Na próxima conversa o cliente já vem guardado. Antes do merge, a marca vale só nesta conversa: siga a edição normalmente.
 
 ### Tempo
 

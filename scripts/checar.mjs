@@ -13,7 +13,9 @@ const livreGB = (bavail * bsize) / 1e9;
 ok(livreGB > 5, `${livreGB.toFixed(0)} GB livres no disco`, `só ${livreGB.toFixed(1)} GB livres: libere pelo menos 5 GB`);
 
 const marca = JSON.parse(readFileSync("src/marca.json", "utf8"));
-ok(marca.arroba !== "@seuperfil", `marca: ${marca.arroba}`, "marca: falta configurar o @ (src/marca.json)");
+const clientes = existsSync("public/marcas") ? readdirSync("public/marcas").filter((d) => existsSync(`public/marcas/${d}/marca.json`)) : [];
+if (clientes.length) linhas.push(`     clientes guardados: ${clientes.join(", ")} (trocar: npm run marca -- <cliente>)`);
+ok(marca.arroba !== "@seuperfil", `marca ativa: ${marca.arroba}`, "marca: nenhuma ativa (guarde o cliente em public/marcas/<cliente>/ e rode npm run marca -- <cliente>)");
 ok(existsSync(`public/${marca.foto}`), "foto de perfil em public/" + marca.foto, `foto de perfil: coloque em public/${marca.foto}`);
 if (marca.logo) ok(existsSync(`public/${marca.logo}`), "logo em public/" + marca.logo, `logo: arquivo public/${marca.logo} não existe`);
 
